@@ -4,11 +4,11 @@
 
 Docker is a containerization service used to run applications in isolated containers. Containers are running instances of images, and images contain instructions including base image, runtime environment of application and other options.
 
-Docker is used in modern application delivery across development and production environments reliably and securely. It is also used in MLOps, Microsevices and Cloud-native applications. Containers are orchestration using Kubernetes system for scalable applications.
+Docker is used in modern application delivery across development and production environments reliably and securely. It is also used in MLOps, microservices and cloud-native applications. Containers are scaled with orchestration using Kubernetes system for scalable applications.
 
 ## Docker image
 
-To build a docker image, we use Dockerfile, it looks like this:
+To build a docker image, we use Dockerfile, a simple Dockerfile looks like this:
 
 ```Dockerfile
 
