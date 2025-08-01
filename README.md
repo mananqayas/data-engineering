@@ -59,31 +59,72 @@ Without orchestration, you'd be:
 - Manually handling retries, failures, and dependencies
 - Completely blind when something breaks at 2AM
 
-#### What worklows I completed using Kestra:
+## [Data Warehouse - Google BigQuery](data-warehouse)
 
-Kestra is an open-source, event-driven orchestration platform that simplifies building both scheduled and event-driven workflows. By adopting Infrastructure as Code practices for data and process orchestration, Kestra enables you to build reliable workflows with just a few lines of YAML.
+A data warehouse is a centralized system to **store, organize, and analyze large volumes of structured data** from multiple sources - specifically designed for **analytics and business intelligence (BI).**
 
-[Kestra official website](https://kestra.io/)
+## 🏢 Think of it like:
 
-**ETL Pipeline for Green and Yellow Taxi data from NYC's Taxi and Limousine Commission (TLC) using Postgresql database**
+> A super-organized digital warehouse where raw materials (data) from different factories (databases, APIs, CRMs) are cleaned, stacked neatly, and made easy to find and analyze for decision-making.
 
-Following tasks are completed for this [ETL pipeline](workflow-orchestration/ingest-csv-to-postgresql.yaml):
+## What is the purpose of a Data Warehouse
 
-1. Setup local instance of Kestra service using [docker compose](workflow-orchestration/docker-compose.yaml)
-2. Extract green and yellow taxi datasets from CSV files
-3. Using jdbc postgresql plugin, copied the CSV files to postgres staging tables
-4. Merged data from staging to main tables for 12 months in a local postgresql database instance
-5. [Used DBT](workflow-orchestration/dbt-with-postgres.yaml) (Data Build Tool) to transform raw data into analytics ready tables and stored them in postgres database
-6. Setup [scheduling and backfills](workflow-orchestration/schedling-and-backfills.yaml) for future and past datasets respectively
+| Goal              |                             Description                              |
+| :---------------- | :------------------------------------------------------------------: |
+| ✅ Analytics      |              Enable fast querying across huge datasets               |
+| ✅ Consolidation  | Combine data from multiple systems (Sales, Marketing, Finance, etc.) |
+| ✅ History        |              Store long-term historical data for trends              |
+| ✅ Data quality   |                Cleaned, structured, standardized data                |
+| ✅ Reporting & BI |             Used by tools like Tableau, Power BI, Looker             |
 
-**ETL Pipeline with Scheduled and Backfills**
+## 📊 How is it different from a regular database?
 
-Following tasks are completed for this [ETL pipeline](workflow-orchestration/gcp-setup-workflow.yaml):
+| Feature       | Operational DB(e.g., PostgreSQL) | Data Warehouse                       |
+| :------------ | :------------------------------: | ------------------------------------ |
+| Optimized for |       Transactions (CRUD)        | Analytics (queries, aggregates)      |
+| Date model    |            Normalized            | Denormalized (star/snowflow schemas) |
+| Writes        |             Frequent             | Periodic (batch/stream)              |
+| Queries       |         Short, frequent          | Long, complex                        |
+| Storage       |        Smaller, real-time        | Historical, large-scale              |
+| Users         |         Apps, developers         | Analysts, data scientists            |
 
-1. Setup production instance of Kestra in GCP using Docker
-2. Setup Google Compute Engine, Google Cloud Storage Bucket, and Cloud SQL for high availability
-3. Created Service Account for Least Privilege access to resources
-4. Setup Kestra workflow to ingest green and yellow taxi datasets from CSV to Gloud Cloud Storage as a datalake
-5. Created [cron schedules](workflow-orchestration/gcp-scheduling-and-backfills.yaml) for future ingestion automatically and backfilled past data
-6. Created Google BigQuery dataset and tables for both green and yellow datasets using Kestra
-7. [Used DBT](workflow-orchestration/gcp-dbt.yaml) (Data Built Tool) to transform raw data into analytics ready tables and stored them in BigQuery dataset
+## 🔁 Workflow: How data flows into a data warehouse
+
+1. **Extract** data from sources e.g. APIs, OLTP databases (MySQL, PostgreSQL etc)
+2. **Transform** it (cleaning, joining, aggregating)
+3. **Load** it into warehouse (ETL or ELT process)
+4. **Query** it using SQL or BI tools
+
+This is part of the **data engineering lifecyle.**
+
+I worked on Google BigQuery warehouse, most of the data warehouse provide the similar features.
+
+**Here are the examples of Cloud Data Warehouses**
+
+| Product                  |   Provider   | Highlights                               |
+| :----------------------- | :----------: | ---------------------------------------- |
+| BigQuery                 | Google Cloud | Serverless, fast, pay-per-query          |
+| Snowflake                | Independent  | Cloud-native, separates compute/storage  |
+| Amazon Redshift          |     AWS      | Scalable, integrates with AWS ecosystem  |
+| Azure Synapse            |  Microsoft   | Deep integration with Power BI and Azure |
+| ClickHouse               |  Yandex OSS  | Super-fast OLAP queries                  |
+| Databricks SQL Warehouse |  Databricks  | Optimized for lakehouse architecture     |
+
+## 📐 Schema Design in Warehouses
+
+Data warehouses often use:
+
+- **Star schema:** Fact table + many dimensions table
+- **Snowflake schema:** Dimensions further normalized
+- **Flat tables:** For fast query performance (common in modern cloud DWs)
+
+## 📈 Real-World Example
+
+E-commerce company data warehouse:
+
+| Source     | Data              |
+| :--------- | :---------------- |
+| Shopify    | Orders, customers |
+| Google Ads | Clicks, spend     |
+| Stripe     | Payments          |
+| Zendesk    | Support tickets   |
